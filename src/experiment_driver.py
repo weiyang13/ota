@@ -30,7 +30,6 @@ def exp(args):
     requests.sort(key=lambda r: r.time)
 
     for i in range(args.minWorkers, args.maxWorkers + 1, args.incrWorkers):
-        print(str(i) + "/" + str(args.maxWorkers) + " Workers")
         workers = ota_worker_generation.generate_uniform(i, args.seed + 2, args.dimX, args.dimY)
         for strategy in getAllStrategies():
             for maxDelay in np.arange(args.minMaxD, args.maxMaxD, args.incrMaxD):
