@@ -1,0 +1,213 @@
+\documentclass[urop]{socreport}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+\pagenumbering{roman}
+\title{Literature Review for Online Task Assignment}
+\author{Tan Wei Yang}
+\projyear{2019/20}
+\projnumber{U038730}
+\advisor{Prof. Leong Hon Wai}
+
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\W}{\mathcal{W}}
+
+\maketitle
+\begin{abstract}
+In this paper, we review existing literature in online task assignment for fleet minimization, as well as other related variants of the problem, including minimum cost maximum bipartite matching and maximum bipartite matching. We discuss the relevance of the results and algorithms from these sources to the online minimum fleet problem with a maximum delay constraint.
+\end{abstract}
+
+\tableofcontents 
+
+\chapter{Introduction}
+
+
+\section{Motivation}
+Online task assignment is a ubiquitous problem. From courier services to transport systems that utilize crowdsourcing like Grab, we require algorithms to assign service providers to users. We ultimately focus on the context of a firm that hires a fleet of service providers to satisfy requests from users, similar to a taxi or a delivery company. In this context, the service provided consists of moving a person or object from a start location to an end location. A major source of operational costs for firms providing such services is the cost of hiring a fleet of workers to meet service requests. Hence, we ultimately seek to minimize the size of the fleet, while keeping to certain constraints. The constraint we have decided to look at is a maximum delay between the time of creation of a service request and the time at which a worker starts to fulfil the request. This is akin to providing a guarantee on the maximum waiting time.
+
+In this paper, we study not only the existing literature on the minimum fleet problem for online task assignment, but also the wider field of task assignment, as the algorithms and heuristics used in different variants of task assignment could be adapted and applied to our variant of the problem as well. This includes the offline variants of the problems, which is used to determine the competitive ratio of the online algorithms.
+
+\section{The Minimum Fleet Problem}
+\subsection{Preliminaries}
+We are given a set $\R$ of requests to be fulfilled. Each request $r_i$ is defined as an immutable tuple $(t_{r_i}, l_{r_i}^0, l_{r_i}^1)$, where $t_{r_i}$ is the time at which the request is created, $l_{r_i}^s$ is the location at which the request starts, and $l_{r_i}^e$ is the location at which the request ends. 
+
+To fulfill the set of requests, we have a set of workers $\W$. Each worker $w_i$ is a mutable tuple $(t_{w_i}, l_{w_i})$, where $t_{w_i}$ is the time at which the worker is available, and $l_{w_i}$ is the location the worker will be when available.
+
+For an assignment $a = (w, r)$, we assign a worker $w$ to a request $r$ at time $t$. The worker starts moving from $l_w$ to $l_r^s$ at time $t_0 = max(t_w, t_r)$, i.e., the time at which the worker is available or the time at which the task is created, whichever is earlier. The worker reaches $l_r^s$ at $t_1 = t_0 + d(l_w, l_r^s)$, where $d(l_w, l_r^s)$ is the distance metric measuring the time taken to move from $l_w$ to $l_r^s$. The worker then begins fulfilling the request. The worker completes the request by reaching $l_r^e$ at $t_2 = t_1 + d(l_r^s, l_r^e)$. In this process, we change the attributes of $w$, $t_w \xleftarrow{} t_2$ and $l_w \xleftarrow{} l_r^e$. This is semantically equivalent to a worker only being available after completing the request the worker was assigned to, and that the worker will be at the location where the previously assigned request was completed. For this assignment, we can obtain the delay, or waiting time, $t_{a} = t_1 - t_r$.
+
+Any assignment made is irrevocable, and assignment has to be done online. In other words, the algorithm functions on the same temporal dimension, and only has knowledge of a request $r$ after its time of creation $t_r$. 
+
+\subsection{Batch-based Assignment}
+It is natural for the assignment to be made immediately when the task is created. An alternative is to perform batch-based assignment, where the assignment is made some time after the task is created. We modify the above formulation slightly to account for this. Each assignment $a$ is now an extended tuple $a = (w,r,t)$, where $t \geq t_r$. We now calculate the time at which the worker starts moving towards $l_r^s$, $t_0 = max(t, t_w)$. We omit $t_r$ in the formula as $t \geq t_r$. The rest of the formulation follows, using the modified calculation of $t_0$. This modified formulation is more general, with the real-time immediate assignment being a special case where $t = t_r$ for all assignments.
+
+\subsection{Problem Statement}
+Given a set of requests $\R$ and a maximum delay $t_d$, construct a set of workers $\W$ of minimum cardinality, and a set of assignments $\A \subset \W \times \R \times \mathbb{R}$ such that:
+\begin{itemize}
+    \item There is a bijective correspondence between $\R$ and $\A$. Semantically, every request must be assigned exactly once after it is created.
+    \item For any assignment $a_i \in \A$, $t_{a_i} < t_d$, i.e. the delay for each assignment cannot exceed the maximum delay.
+    \item Assignment is made online.
+\end{itemize}
+
+\subsubsection{Soft Constraints}
+Instead of a hard maximum delay constraint, we can consider adding a heavy penalty function for exceeding the maximum delay, or allowing a fixed proportion of assignments to exceed the maximum delay.
+
+\subsubsection{Instantiation of Workers}
+In the construction of $\W$, each worker $w$ should have a starting time available $t_w \geq 0$, and any valid starting location.
+
+\subsubsection{Knowledge of $\R$}
+While an online algorithm does not have information on the exact requests in $\R$, we can have knowledge of the frequency and distribution of requests across time and location in solving the minimum fleet problem.
+
+\subsubsection{Concrete Representation of Location}
+The model we defined uses an arbitrary concept of location and distance. We consider two different representation of location and distance:
+
+\begin{itemize}
+    \item We can represent locations as coordinates in a 2D Cartesian plane, and use Euclidean distance as the distance metric.
+    \item We can represent locations as vertices in a weighted graph, and use the length of the shortest path as the distance metric.
+\end{itemize}
+
+Note that the graph representation of location is more applicable for real-world scenarios, such as taxi systems or courier services, which often utilize a transportation network. While positional information (longitude and latitude) can be mapped to Cartesian coordinates, Euclidean distance does not map well to the time taken to travel from point to point.
+
+Nevertheless, we also intend to study the problem in a Cartesian plane to understand the behaviour of various algorithms in this scenario, as well as due to the availability of existing literature such as \cite{cheng,tong} that work with the Cartesian plane.
+
+\section{Spatial Crowdsourcing}
+A related, but vastly different problem is spatial crowdsourcing, as formalized by \cite{spatial}. In spatial crowdsourcing, there is no knowledge of workers, in addition to requests as well. This often results in batch-based algorithms for bipartite matching, including maximum matching, where the number of requests fulfilled is maximised, and minimum cost maximum matching, where the total cost, analogous to distance travelled, is minimised while maximising cardinality of matching. 
+
+While the formulation of spatial crowdsourcing is very different from the minimum fleet problem, it is still within the general field of online task assignment, and we can apply the same heuristics in our algorithms. In the next chapter, we will present relevant algorithms from spatial crowdsourcing that could be applied to the minimum fleet problem. We consider only the algorithms that apply for the case where requests can be fulfilled by a single worker.
+
+\chapter{Review of Literature}
+In this chapter, we look at various problems that are related to the minimum fleet problem. For each problem, we will give an overview of the theoretical results and algorithms in the literature that are relevant to the minimum fleet problem, as well as any experimental evaluation performed. 
+
+\section{Minimum Fleet Problem}
+To the best of our knowledge, our exact formulation of the minimum fleet problem is not well studied. \cite{nature} presents an offline algorithm for a variant of the minimum fleet problem, and uses the results as a benchmark to analyse two online algorithms.
+
+\subsection{The Offline Problem}
+Instead of a maximum delay constraint, \cite{nature} imposes a zero delay constraint, as well as a maximum connection time, $\delta$, for their offline variant of the minimum fleet problem. Connection time refers to the time between completing a request and starting the next request. This can also be seen as the amount of time the worker is idle for. 
+
+\subsection{Shareability Graph}
+\cite{nature} solves the above offline minimum fleet problem in using a directed graph structure known as the shareability graph.
+
+The vertices of the shareability graph represent requests and an edge from request $r_i$ to request $r_j$ indicates that $r_j$ can be assigned to the same worker consecutively after $r_i$ without violating the maximum connection time $\delta$ with zero delay.
+
+This transforms the minimum fleet problem into a minimum path cover problem, where the minimum number of workers required is exactly the minimum number of paths.
+
+The resulting shareability graph is a directed acyclic graph as $t_{r_i} < t_{r_j}$ for all edges $(r_i, r_j)$ in the graph, inducing a natural topological order. Hence, the equivalent minimum path cover problem can be solved efficiently using the Hopcroft-Karp algorithm.
+
+The value of $\delta$ used has to be set by the service operator, and needs to be tuned to the dataset.  
+
+\subsection{Online Algorithms}
+\cite{nature} further presents two online algorithms for task assignment.
+
+\subsubsection{On-the-fly Assignment}
+For each request $r$ that is made, the first available vehicle that minmizes waiting time is chosen.
+
+\subsubsection{Batch Assignment}
+Requests are collected over fixed time intervals and processed in batches. For each batch, maximum bipartite matching is used to assign workers to requests. The matching is done to maximise the number of trips that can be fulfilled within a fixed delay.
+
+\subsection{Comparison with Real-World Data}
+The performance of the offline and online algorithms were compared against a dataset consisting of all taxicab trips in New York City in 2011. A street network of Manhatten was first constructed using open data of the map, and travel times are computed using historical data. The details of the preprocessing and travel time computation are based on the supplementary information from \cite{preprocess}. 
+
+Compared to the actual dataset, the minimum fleet size obtained by constructing the shareability graph for daily demand was 40\% lower than the actual number of circulating taxis. The batch assignment achieved a 30\% reduction in fleet size while fulfilling a maximum delay of 6 minutes for more than 90\% of trip requests, which is close to the 40\% achieved by the offline method. The batch assignment consistently had a higher percentage of trips served while fulfilling the maximum delay compared to the on-the-fly model.
+
+\subsection{Discussion}
+\subsubsection{Use of Offline Minimum for Comparison}
+We note that while the performance of batch assignment seems optimistic when compared to the offline lower bound, the lower bound obtained from the shareability graph is not entirely analogous to the result of online assignment. The offline assignment does not allow for any request to have any delay, in addition to the connection time constraint. These conditions are much stronger than the conditions for online assignment.
+
+However, it is difficult to obtain a more suitable lower bound that allows for the same level of service guarantees as the online assignment. In particular, shareability graph cannot be easily modified to allow for delays. Due to the cumulative nature of delays, whether or not two requests can be fulfilled consecutively depends not only on the attributes of each request, but also the delay experienced by the first trip. Hence, the presence of an edge depends on the path taken.
+
+\subsubsection{Comparison between Online Algorithms}
+Batch assignment was shown to consistently have a higher percentage of trips served within the maximum delay compared to the on-the-fly assignment, which is reasonably within expectation, as the maximum matching in batch assignment is optimised for the maximum delay.
+
+However, depending on the nature of the exact application, we may also need to pay attention to catastrophic delays in requests that are not served while fulfilling the maximum delay.
+
+\section{Batch-based Maximum Bipartite Matching}
+In the literature for spatial crowdsourcing, maximum bipartite matching is often used to find the maximum number of requests that can be served in each batch of requests. This is in line with the minimum fleet problem, which seeks to fulfill all (or most) requests with a maximum delay constraint. In this section, we present algorithms presented by \cite{kazemi} for batch-based maximum bipartite matching.
+
+\subsection{Greedy Algorithm for Batch-Based Assignment}
+In the greedy algorithm, for each batch, the optimal assignment for the batch is taken. In other words, the assignment serves the maximum number of requests possible for the batch. This is done by reducing the problem into a maximum flow problem, by connecting worker vertices to request vertices that it can fulfill. After constructing the flow network graph, any algorithm for solving the maximum flow problem, such as the Ford-Fulkerson algorithm, can be applied to obtain an optimal solution for thee batch. 
+
+\subsection{Least Location Entropy Priority}
+\label{llep}
+As the greedy algorithm does not take into account long term performance, \cite{kazemi} devised an algorithm (G-llep) using a heuristic, where requests that are located in worker-sparse areas are given greater priority as they are less likely to be fulfilled. This is done by calculating location entropy for each discretized location, which involves the proportion of visits each worker made to that location. By associating each request with its location entropy, the problem is reduced to a minimum-cost maximum flow problem, which can be solved by applying linear programming to the maximum flow result.
+
+\subsection{Nearest Neighbour Priority}
+\cite{kazemi} also presents another algorithm (G-nnp) that uses a heuristic to minimize the total travel cost. A similar approach to \ref{llep} is used, except the weights in the minimum-cost maximum flow problem are the distances between the requests and the workers instead.
+\label{nnp}
+
+\subsection{Experimental Comparison}
+\cite{kazemi,cheng} both performed experimental evaluation of these 3 algorithms on synthetic data following uniform distribution of worker and request locations. In addition, \cite{kazemi} used real data from Gowalla, an application that allows users to check into locations they have visited; \cite{cheng} uses data of the temporal locations of taxis and orders between 7.30a.m. and 8.30a.m. in a normal day in urban Beijing, obtained from DiDi Chuxing.
+
+For both studies, G-llep consistently produces better results than the greedy algorithm in terms of number of requests fulfilled, whereas G-nnp performs worse than the greedy algorithm under the same metric, but performs better in terms of average travel cost.  
+\label{nnpexp}
+
+\subsection{Discussion}
+\label{discussion}
+As expected, G-llep performs better than the greedy algorithm. However, location entropy may not be directly used in the minimum fleet problem. We require all reqests to be assigned with a maximum delay, and the concept of prioritizing requests under such a strong condition seems redundant. However, we can still adapt the idea of incorporating knowledge of the distribution of workers into our algorithm.
+
+\section{Online Maximum Bipartite Matching}
+In this section, we look at the algorithms and theoretical results for online maximum bipartite matching presented by \cite{karp,goel}
+\subsection{Deterministic Algorithms}
+\cite{karp} proves that any deterministic algorithm for online maximum bipartite matching can only have a competitive ratio of up to $\frac{1}{2}$ under the adversarial model. \cite{goel} proves that the competitive ratio has an upper bound of $\frac{3}{4}$ in a random order model.
+
+\subsubsection{GREEDY Algorithm}
+\cite{karp} shows that the GREEDY algorithm, where a request is matched to an arbitrary worker that can fulfill it as long as it is possible (the alternative being to not match it), achieves the upper bound competitive ratio of $\frac{1}{2}$ under the adversarial model, as well as a competitive ratio of $1 - \frac{1}{e}$ under the random order model.
+
+\subsection{Randomized Algorithms}
+\cite{karp} proves that the competitive ratio for any online algorithm in the adversarial model has an upper bound of $1 - \frac{1}{e}$.
+\cite{goel} proves that the competitive ratio of any randomized algorithm has an upper bound of $\frac{5}{6}$ in a random order model.
+\subsubsection{RANKING}
+\label{ranking}
+\cite{karp} presents the RANKING algorithm, which first generates a random permutation among all workers. The workers are given priority based on this permutation. When a request can be assigned to a worker, the worker of the highest priority is assigned that request.
+
+Although it is simple, this algorithm achieves the optimal competitive ratio of $1 - \frac{1}{e}$ under the adversarial model. Compared to the greedy algorithm, it also achieves a better competitive ratio of 0.696 under the random order model \cite{rankingrandomorder}.
+
+\subsection{Discussion}
+Relating back to online task assignment, in a small time window, as workers are unlikely to be able to perform more than a single task, the assignment becomes essentially equivalent to online maximum bipartite matching. Hence, the results regarding online maximum bipartite matching could be highly relevant to our study.  
+
+The bounds for competitive ratios under the adversarial and random order models for both deterministic and randomized algorithms suggest that even when there are enough workers for there to exist an optimal assignment, online algorithms are still likely to fail under certain conditions. 
+
+To address this problem, we have to introduce redundancies in our system by increasing the number of workers so that each request can be fulfilled by more workers. In particular, if there are $n$ requests and all requests can be fulfilled by at least $n$ workers, any online algorithm will be able to successfully assign all requests to workers. 
+
+The higher competitive ratio of RANKING in the adversarial and random order models as compared to the greedy algorithm makes it a good candidate for implementation.
+
+
+\section{Online Minimum Cost Maximum Bipartite Matching}
+Minimum cost maximum bipartite matching is another problem that is often studied, extending the motivation of the nearest neighbour priority in \ref{nnp}. It involves minimizing the cost of .In this section, we will briefly discuss the algorithms in spatial crowdsourcing for minimum weighted matching, as are collated by \cite{tong}.
+\subsection{Deterministic Algorithms}
+\cite{greedy} presents two deterministic algorithms, the greedy, or nearest neighbour algorithm and the permutation algorithm.
+
+The greedy algorithm matches each newly arrived requests with the nearest available worker to minimize cost for each request. \cite{greedy} showed that this results in a competitive ratio of $2^k - 1$ for $k$ workers.
+
+\cite{greedy} also presents another deterministic algorithm, the permutation algorithm, which has an improved competitive ratio of $2k -1$. We will not cover this algorithm in detail.
+
+\cite{tong} argues that while the competitive ratio of the greedy algorithm is bad, under a random order model the worst case scenario presented by \cite{greedy} has a constant competitive ratio of 3.195, and the average case is likely to have a constant competitive ratio as well.
+
+\subsection{Randomized Algorithms}
+\cite{hst-g} and \cite{hst-re} have respectively presented the HST-Greedy and HST-Reassignment algorithms, which use the $\alpha$-Hierarchically-Separated-Tree ($\alpha$-HST). The randomized nature of both algorithms stem from the construction of the $\alpha$-HST, which is itself a randomized algorithm. The HST-Greedy algorithm takes the nearest available worker to a request, and outputs the worker that is nearest to this worker according to the tree metric. The HST-Reassignment algorithm takes this a step further by allowing for restricted reassignment of previous assignments.
+
+\subsection{Experimental Analysis}
+\cite{tong} studies the experimental performance of the algorithms introduced in this section, using taxi-calling data on the real-time taxi-calling platform, ShenZhou, for Beijing in May 2015. Additionally, synthetic datasets were generated using various distributions for workers and requests. This includes the Power-Law and Exponential distributions, based on studies that show that the movement of people and taxis usually follow these distributions in cities \cite{dist1,dist2}, as well as the Uniform and Normal distributions, which are commonly used.
+
+For both real and synthetic datasets, the greedy algorithm consistently performed the best, despite its theoretical competitive ratio under the adversarial model. This justifies the belief that the average case competitive ratio for the greedy algorithm should also be constant.
+
+\subsection{Discussion}
+In general, the algorithms presented here are designed to minimize the total distance travelled. In light of the relatively poorer performance of the nearest neighbour priority heuristic for maximum matching in \ref{nnpexp}, the algorithms presented in this section may not be directly applicable to our problem, apart from using the greedy algorithm as a baseline to work with. However, if we are able to model our problem as an online minimum cost maximum bipartite matching, say using a cost metric based on the distribution of workers, we could apply the algorithms discussed in this section.
+
+The experimental analysis by \cite{tong} shows that the theoretical results we obtain from an adversarial analysis does not translate well in experimental evaluation, and analysis from a random-order model would be more suitable.
+
+Furthermore, the experimental setup of \cite{tong} uses a variety of spatiotemporal distributions of workers and requests, which we can consider adopting as well.
+
+\chapter{Conclusion}
+While the minimum fleet problem with the hard constraint of a maximum delay is not well studied, we have gathered sources that study problems that are similar to our variant of the minimum fleet problem.
+
+From these sources, we find several algorithms and heuristics that could potentially be applied for the minimum fleet problem. This includes the RANKING algorithm in \ref{ranking}, as well as the least location entropy priority heuristic in \ref{llep}.
+
+In addition, the methods used for experimental evaluation using synthetic and real datasets could also be applied in our study. Notably, the range of distributions used by \cite{tong} to generate synthetic dataset could be considered when applying any algorithm we implement to solve a concrete problem based on historical data.
+
+Moving forward, we intend to apply the relevant techniques, heuristics and algorithms as groundwork for our study, and where possible, incorporate any novel ideas in the process of our research to devise an algorithm that is catered to solving the minimum fleet problem.
+
+\bibliographystyle{socreport}
+\bibliography{socreport}
+
+\end{document}

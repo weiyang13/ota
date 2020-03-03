@@ -1,0 +1,17 @@
+Present:
+  Wei Yang
+  Melvin
+
+Meetings with Prof Leong are now scheduled on Mondays, 4-6pm.
+
+Prototype - I have made a quick prototype of the greedy algorithm on a
+Cartesian plane, and did a quick analysis based on the prototype (I have
+pushed the relevant files)
+
+(a) For this prototype, I am coding in Java first. I will switch to Python in
+future prototypes but I'm more comfortable with Java right now
+
+(b) There is a major bug affecting the results which I have not yet debugged.
+
+(c) In addition to debugging, Prof has asked me to write a verifier for the
+algorithm.

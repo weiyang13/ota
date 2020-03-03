@@ -1,0 +1,27 @@
+Present:
+  Hon Wai
+  Melvin
+  Wei Yang
+  De Hui
+
+Wei Yang gave a presentation of rough project plan:
+  The general problem is real time delivery fleet optimization
+  Looking at VRP problems as they are on graph, see if they can be done online
+
+  Sources of risk
+    lack of project data
+
+    don't have coordinates for locations only names 
+
+    not familiar with Python
+
+Advise from Hon Wai
+  start with OTA and greedy algorithm
+  try using existing dataset published by other research groups
+  refer to sample project plan to prepare for presentation next week
+
+Comments from Melvin
+  need the data to estimate the travel time between locations
+
+  we can start with (x,y) first for simplicity, should not affect the problem
+  formulation/algorithms

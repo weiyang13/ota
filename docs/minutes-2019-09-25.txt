@@ -1,0 +1,35 @@
+Present:
+    Melvin
+    Wei Yang
+
+Nature paper:
+    Offline algorithm
+            Offline algorithm is very different from batch based online algorithm
+            Offline algorithm used as a baseline for comparison
+            Not directly applicable to solving the problem
+            Can mention this in lit review
+    Not clear: are trips that are not successfully served served at all
+        ACTION: Send email soon to ask for code.
+
+Lit review
+    Diagrams: could do static animations, like Tong et al (2016)
+        Could also borrow diagrams from other papers, citing source
+    Guidelines available, expected 6-10 pages
+    After reviewing papers, identify gaps in research
+
+Future work
+    Can consider trying batch in the future.
+
+    Use of shareability graph for our case can give an upper bound on minimum fleet size
+        difficult to solve for optimal using shareability
+        can assume maximum delay for all tasks as an approximation
+        should still focus on online case
+
+
+    Greedy forces you to choose minimum waiting time, but there is a set of feasible workers
+        Can look at G-llep (Least Location Entropy Priority)
+            refer to Kazami et al. (reference from cheng et al),
+        batch based, need to check if this is implemented in online in the original paper
+
+
+

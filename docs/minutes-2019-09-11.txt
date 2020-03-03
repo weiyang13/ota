@@ -1,0 +1,81 @@
+Present:
+    Melvin
+    Wei Yang
+
+Closed issues:
+    Minutes issue
+        Commit contains adding an empty file.
+        Should review commits before pushing to remote repo
+        Disable git adding in PyCharm
+
+Open issues
+    #30 (refactoring):
+        Too big of an issue
+        ACTION: Rename, and separate into multiple issues
+        data format
+            DataFrame cannot be nested - cannot represent composition of agent nicely
+            Go for more flexible structure at the beginning
+
+
+    #30 (analysis):
+        Can use similar as last time, but with corrected code and max waiting time instead
+        Don't overengineer the prototype right now, do minimum required to get analysis out
+        compare the modified and pre-modified greedy
+            assign to the next agent that is idle
+            interesting pre-observations: minimize idle time / maximise utilisation
+        ACTION: continue with analysis, delay refactoring
+
+    Milestones
+        Use milestones to organize issues
+
+    #36 (Nature paper):
+		Website: http://senseable.mit.edu/MinimumFleet/
+        Good place to start the literature review
+        Page 8: can email to ask for code
+            ACTION: draft email.
+        In the paper, it uses a shareability graph, constrained to a maximum idle time for each taxi
+            Minimum (acyclic) path cover used : polynomial time, equivalent to maximum matching
+            exact minimum number of taxis/paths given for total information
+            batch method discussed as well (batch model) vs on-the-fly model
+            can refer for exact lower bound given full information
+
+    Lit review organisation:
+        Nomenclature
+            No definitive answer, doesn't really matter
+
+        Format (final):
+            Use Overleaf, and export tex files
+
+        For each paper: summarize impt points from that paper.
+            Main ideas: e.g. shareability graph in #36
+            Filter out irrelevant parts: e.g. multi-agent problems
+        Then group papers together to better organise lit review.
+        Can split into offline / online (batch / on-the-fly)
+
+        Create issues to read the paper and find impt points (1 issue for each)
+            Start with #36
+
+        Other taxi papers
+            Of similar content to nature paper, but poorer quality
+            Just look at nature paper for offline
+
+        Older papers for online
+            Tong et al (2016), Nature paper
+            multiple duplicate papers
+
+        ACTION: Read Nature paper, then Tong et al, as well as relevant references
+            separate issues for each paper
+            write main ideas of the paper
+
+        ACTION: Write out problem for lit review
+
+    #14
+        Not so relevant right now
+
+    Model of agents
+        Currently it is randomly generated
+        For fleet, may be better to spawn at depos, rather than depo
+        Can justify random
+        For much later: proactively move to agents to a waiting area
+            find unreachable parts of the unit square given
+            a cover problem: find ways to maximise cover of requests with current fleet

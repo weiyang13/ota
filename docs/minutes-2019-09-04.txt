@@ -1,0 +1,53 @@
+Present:
+    Melvin
+    Wei Yang
+    Prof Leong
+
+Discussion on incorporating dataset
+    can use API to convert data on long/lat
+
+Discussion on current algorithm / code
+    Current greedy heuristic looks to minimize travel distance / waiting time
+    Objective functions / constraints to look at: delay, penalty, hard deadline
+
+    Discrepancy of current algo with literature
+        Greedy algo in literature checked for nearest idle worker
+        Generally not feasible to search for busy workers in practice
+        KIV: Impact on performance
+        ACTION: differentiate greedy method in current prototype from literature
+
+    ACTION: Wei Yang to refactor code by Sunday
+        Separate data generation, algorithm, and analysis
+        Binary search to find minimum workers for max waiting time constraint
+        Print entire trace of algorithm in analysis (with toggle)
+        Output to include additional statistics (including # of funny cases)
+
+Visualization/Introduction of problem
+    Current problem definition is abstract, need a worked example
+    Can visualise as worker threads over time, showing free/busy periods and utilization rate.
+
+    Use food delivery as a context to introduce problem.
+    ACTION: Update powerpoint slides
+
+Report and Lit Review
+    Should focus on milestones: current prototyping should not take too long
+    Convert overall project plan to UROP report format early.
+    Break down report writing into small chunks.
+    Write report in plain text and format later
+    Need to have a discussion on how to organise literature survey (KIV, soon).
+        Refer to Sriganesh's survey (on comp bio) and Ket Fah's tutorial from Prof's website as good examples
+
+Future meetings
+    At 2.30p.m., Wednesdays, as Prof Leong has GET lessons right before.
+    ACTION: Wei Yang to create event
+    
+Future work
+    KIV: distribution of task to simulate peak hours, city vs rural areas
+        Can use multimodal normal distribution for distribution over time
+    KIV: batch processing of tasks in time window
+    KIV: Competitive ratio with complete knowledge of tasks
+    KIV: Lower bound on number of workers as reference for comparison
+        refer to berth allocation problem
+        Obtain from local demand/density of jobs
+        simplifying assumptions: task assigned immediately, negligible distance between worker and task
+            i.e. delayToStart = (time arrive - time assign) + (time assign - time create) = 0

@@ -1,0 +1,35 @@
+Present:
+    Melvin
+    Wei Yang
+
+Closed issues:
+    Slide updates (#31 and #40):
+        A legend would be useful for the presentation slides to make it self contained
+
+        Average and maximum waiting time found to be non-monotonic
+            still required to optimise subject to maximum waiting time
+            penalty function may be complicated to optimise, can look at percentage fulfilled instead
+
+        experiment was done in a unit square with unit velocity
+
+Open issues:
+    Nature paper:
+        uses shareability graph
+        motivation is also to decrease manpower, but not directly applicable
+
+        shareability graph may not work for our problem
+            delay for two requests are cumulative: delay for first request carries on to second request
+            lower bound is not that important or easy to get
+
+Future work:
+    Can eliminate randomness by fixing agents' initial position to e.g. (0.5, 0.5)
+
+    Repeat experiment with same parameter except seed, and get average values
+
+    Current algorithm not designed to minimise maximum delay
+        One approach: Given a maximum delay, choose from set of workers that meet constraint
+            Identify heuristics for this choice
+
+    Perform experiment on real data (NYC)
+
+

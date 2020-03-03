@@ -1,0 +1,14 @@
+Ran the following command on compute cluster xcna0:
+
+nohup python3.4 src/experiment_driver.py --expType syn --minWorkers 50 --maxWorkers 300 --incrWorkers 10 --numRequests 1000 --duration 100 --minMaxD 0.1 --maxMaxD 0.5 --incrMaxD 0.05 --dimX 2 --dimY 2 --seed 20 --resultsFile results.csv --loggerFile log.txt
+
+This took about 12 hours. Note that full logging is done here. Also, the first results file is missing the stats for
+greedy algo for higher values of delay because the code is sent before the loop break for delay insensitive strategies
+was removed.
+
+This is be remedied in a followup job with a similar command, changing minMaxD (because 0.10 is done), and
+adding logLevel to increase speed. This took roughly 3.5 hours to process.
+
+nohup python3.4 src/experiment_driver.py --expType syn --minWorkers 50 --maxWorkers 300 --incrWorkers 10 --numRequests 1000 --duration 100 --minMaxD 0.15 --maxMaxD 0.5 --incrMaxD 0.05 --dimX 2 --dimY 2 --seed 20 --resultsFile results.csv --loggerFile log.txt --logLevel warning
+
+nohup python3.4 src/experiment_driver.py --expType syn --minWorkers 50 --maxWorkers 300 --incrWorkers 10 --numRequests 1200 --duration 100 --minMaxD 0.10 --maxMaxD 0.5 --incrMaxD 0.05 --dimX 2 --dimY 2 --seed 20 --resultsFile results.csv --loggerFile log.txt --logLevel warning

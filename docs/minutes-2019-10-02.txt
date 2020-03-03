@@ -1,0 +1,33 @@
+TODO: outline.
+
+Karp's paper:
+Competitive ratio of cardinality is best for :
+refer to ......
+online unweighted matching for
+1/2 for greedy
+any deterministic algo: worst case competitive ratio of 1/2
+
+any
+randomly fix the priority of the workers and assign based on priority
+(contrasted with randomly picking a viable worker to assign)
+can try random priority
+
+can mention maximum matching as a variant we are studying
+can look at offline/online weighted(considers distance) and unweighted for categories (1 or 2 per case)
+offline unweighted: shareability
+online (un)weighted: greedy, hst, online bipartite ranking (karp), batch (nature)
+offline weighted: maximum flow
+
+look at comparisons, results,
+
+can analyse actual efficiency (not asymptotic)
+
+dont care about weights
+
+task assignment looks at cost, whereas online bipartite matching looks at cardinality
+edges: workers that can make it in time
+
+framing ota with max delay constraint as maximum matching: must have maximum cardinality
+successful served trips
+
+HST: randomized algorithm
