@@ -41,44 +41,6 @@ def exp(args):
     logger.close()
     results.close()
 
-# Not currently used
-#def exp(args):
-#    results = Results(args.resultsFile)
-#    logger = Logger(args.loggerFile)
-#    ota_request_generation.generate_uniform(args.numRequests, args.duration, args.seed, "dataset/requests.txt")
-#    for i in range(args.minWorkers, args.maxWorkers + 1, args.incrWorkers):
-#        ota_worker_generation.generate_uniform(i, args.seed * 2, "dataset/workers.txt")
-#        for strategy in getAllStrategies():
-#            run("dataset/workers.txt", "dataset/requests.txt", strategy, args.max, args.duration, logger, results)
-#    logger.close()
-#    results.close()
-
-# Not currently used
-#def exp2(args):
-#    results = Results(args.resultsFile)
-#    logger = Logger(args.loggerFile)
-#    for numRequests in [800, 900, 1000, 1100, 1200]:
-#        ota_request_generation.generate_uniform(numRequests, args.duration, args.seed, "dataset/requests.txt")
-#        for max in [0.2, 0.25, 0.3, 0.35, 0.4]:
-#            for i in range(10, 91, 10):
-#                ota_worker_generation.generate_uniform(i, args.seed * 2, "dataset/workers.txt")
-#                for strategy in getAllStrategies():
-#                    run("dataset/workers.txt", "dataset/requests.txt", strategy, max, args.duration, logger, results)
-#    logger.close()
-#   results.close()
-
-# Not currently used
-# def exp3(args):
-#    results = Results(args.resultsFile)
-#    logger = Logger(args.loggerFile)
-#    ota_request_generation.import_requests("dataset/finaldata.csv", "dataset/requests.txt")
-#    for i in range(950, 1401, 150):
-#        ota_worker_generation.generate_scaled_uniform(i, args.seed * 2, "dataset/workers.txt")
-#        for strategy in getAllStrategies():
-#            run("dataset/workers.txt", "dataset/requests.txt", strategy, 0.3, args.duration, logger, results)
-#    logger.close()
-#    results.close()
-
 def main():
     parser = argparse.ArgumentParser()
     ##

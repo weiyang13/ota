@@ -4,12 +4,6 @@ from ota_lang import Worker
 from ota_lang import Request
 from ota_lang import Location
 
-
-# Not in use
-#def extractWorkers(fileName):
-#    file = open(fileName, "r")
-#    return yaml.load(file)
-
 # Extract requests from csv file
 def extractRequests(fileName):
     f = open(filename, 'w')
