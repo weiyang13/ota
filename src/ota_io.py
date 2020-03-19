@@ -1,4 +1,5 @@
 import csv
+import json
 
 from ota_lang import Worker
 from ota_lang import Request
@@ -52,6 +53,14 @@ class Logger:
         self.filename = filename
         self.file = open(filename, "w")
 
+
+class JsonAssignmentWriter:
+    def __init__(self, filename):
+        self.filename = filename
+
+    def write(self, assignments):
+        with open(self.filename, "w") as write_file:
+            json.dump(assignments, write_file)
 
 class Results:
     def record(self, statistics):
