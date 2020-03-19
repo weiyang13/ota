@@ -1,4 +1,6 @@
 import argparse
+import copy
+import numpy as np
 
 from ota_strategy import getAllStrategies
 
@@ -8,8 +10,6 @@ from ota_io import extractRequests
 
 import ota_request_generation
 import ota_worker_generation
-import copy
-import numpy as np
 
 def exp(args):
     results = Results(args.resultsFile)
@@ -18,7 +18,11 @@ def exp(args):
         requests = extractRequests(args.requestsFile)
         duration = (max(requests, key = lambda r : r.time)).time
     elif args.expType == "syn":
-        requests = ota_request_generation.generate_uniform(args.numRequests, args.duration,
+        if args.rdist == "unif":
+            requests = ota_request_generation.generate_uniform(args.numRequests, args.duration,
+                                                           args.seed + 1, args.dimX, args.dimY)
+        elif args.rdist == "peaks":
+            requests = ota_request_generation.generate_peaks(args.numRequests, args.duration,
                                                            args.seed + 1, args.dimX, args.dimY)
         duration = args.duration
     else:
@@ -53,6 +57,7 @@ def main():
     #       resultsFile: filename of output results file
     #       loggerFile: filename of output logger file
     #       logLevel: intensity level of logging (fine, info, warning, off)
+    #       dimX, dimY: to set range of locations workers are generated in
     #  For real dataset experiments:
     #       requests file: filename of real dataset for requests
     #  For synthetic dataset experiments:
@@ -106,6 +111,9 @@ def main():
     )
     parser.add_argument(
         "--logLevel", help="intensity level of logging (fine, info, warning, off)", required=True, type=str
+    )
+    parser.add_argument(
+        "--rdist", help="request distribution (peaks, unif)", required=False, type=str
     )
     args = parser.parse_args()
     exp(args)
