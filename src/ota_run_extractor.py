@@ -29,7 +29,7 @@ def run(args):
     workers = ota_worker_generation.generate_uniform(args.numWorkers, args.seed + 2, args.dimX, args.dimY)
     for strategy in getAllStrategies():
         if type(strategy).__name__ == args.strategy:
-            assignments = strategy.getAssignments(workers, requests, args.seed, args.maxD)
+            assignments = strategy.getAssignments(workers, requests, args.seed, args.maxD, args.dimX, args.dimY, args.duration)
             jsonAssignmentWriter.write(assignments)
 
 def main():

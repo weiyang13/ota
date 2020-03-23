@@ -27,7 +27,7 @@ class Strategy:
         results.record(statistics)
         logger.info(str(statistics))
 
-    def getAssignments(self, workers, requests, seed, maxDelay):
+    def getAssignments(self, workers, requests, seed, maxDelay, maxX, maxY, duration):
         self.workers = workers
         self.requests = requests
         self.seed = seed
@@ -40,6 +40,9 @@ class Strategy:
             workerCopy = copy.copy(worker)
             worker.assign(request)
             return {
+                "duration" : duration,
+                "xmax" : maxX,
+                "ymax" : maxY,
                 "agent" : workerCopy.getJsonDict(),
                 "request" : request.getJsonDict(),
                 "arrivetime" : workerCopy.arrivalDelay(request) + request.time,
