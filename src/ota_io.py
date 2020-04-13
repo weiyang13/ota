@@ -6,13 +6,15 @@ from ota_lang import Request
 from ota_lang import Location
 
 # Extract requests from csv file
-def extractRequests(fileName):
-    f = open(filename, 'w')
-    with open(src) as csv_file:
+def extractRequests(filename):
+    requests = []
+    with open(filename) as csv_file:
+        i = 1
         csv_reader = csv.reader(csv_file)
-        requests = [Request(Location(float(row[1]), float(row[2])),
+        for row in csv_reader:
+            requests.append(Request(i, Location(float(row[1]), float(row[2])),
                             Location(float(row[3]), float(row[4])),
-                            float(row[0])) for row in csv_reader]
+                            float(row[0])))
         return requests
 
 class Logger:
