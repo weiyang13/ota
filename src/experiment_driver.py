@@ -17,6 +17,10 @@ def exp(args):
     if args.expType == "real":
         requests = extractRequests(args.requestsFile)
         duration = (max(requests, key = lambda r : r.time)).time
+        requestX = max(requests, key = lambda r : max(r.start.x, r.end.x))
+        args.dimX = max(requestX.start.x, requestX.end.x)
+        requestY = max(requests, key = lambda r : max(r.start.y, r.end.y))
+        args.dimY = max(requestY.start.y, requestY.end.y)
     elif args.expType == "syn":
         if args.rdist == "unif":
             requests = ota_request_generation.generate_uniform(args.numRequests, args.duration,
@@ -24,6 +28,9 @@ def exp(args):
         elif args.rdist == "peaks":
             requests = ota_request_generation.generate_peaks(args.numRequests, args.duration,
                                                            args.seed + 1, args.dimX, args.dimY)
+        elif args.rdist == "peakt":
+            requests = ota_request_generation.generate_peakt(args.numRequests, args.duration,
+                                                             args.seed + 1, args.dimX, args.dimY)
         duration = args.duration
     else:
         logger.warning("exp type error")
@@ -62,6 +69,7 @@ def main():
     #       requests file: filename of real dataset for requests
     #  For synthetic dataset experiments:
     #       numRequests: number of requests to generate
+    #       rdist: request distribution, unif for uniform, peaks for brooklyn spatial, peakt for brooklyn temporal
     #       duration: time period of requests (generated or not)
     ##
     parser.add_argument(
@@ -113,7 +121,7 @@ def main():
         "--logLevel", help="intensity level of logging (fine, info, warning, off)", required=True, type=str
     )
     parser.add_argument(
-        "--rdist", help="request distribution (peaks, unif)", required=False, type=str
+        "--rdist", help="request distribution (peaks, peakt, unif)", required=False, type=str
     )
     args = parser.parse_args()
     exp(args)
