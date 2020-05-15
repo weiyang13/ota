@@ -1,1 +1,3 @@
-store output of experiments
+Subfolders are created for each experiment
+
+Each subfolder contains the relevant scripts, and the results for the experiments
