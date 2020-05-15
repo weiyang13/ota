@@ -5,7 +5,7 @@ Directories
 
 * ./src for source code (and some tests, but unstructured)
 * ./data for real-world dataset obtained, including sql script
-* ./exp for and scripts ran and results for experiments
+* ./expt for and scripts ran and results for experiments
 * ./doc for reports (incl. LaTeX files), presentations and papers
 
 Real world dataset
