@@ -1,0 +1,7 @@
+dataset for experiments go here
+
+./brooklyn folder contains brooklyn datasets used in the experiments, and a sample sql for one of the datasets
+files outside of this folder are for initial trials
+
+
+NYC taxi records: https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page

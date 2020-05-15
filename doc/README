@@ -2,6 +2,9 @@ add create documentation goes here
   thesis
   literature survey
   mid-term report
+  presentations
   etc
 
 binary files should be added using git lfs
+
+folders for each report include pdf and LaTeX files
